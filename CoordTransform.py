@@ -61,13 +61,15 @@ def gcj02_to_wgs84(lng, lat):
     return [lng * 2 - mglng, lat * 2 - mglat]
 
 
-def gps84_To_Gcj02(lat, lon):
+def gps84_To_Gcj02(lon, lat):
     """
     WGS84转GCJ02(火星坐标系)
     :param lng:WGS84坐标系的经度
     :param lat:WGS84坐标系的纬度
     :return:
     """
+    if out_of_china(lon, lat):  # 判断是否在国内
+        return [lon, lat]
     dLat = transformLat(lon - 105.0, lat - 35.0)
     dLon = transformLon(lon - 105.0, lat - 35.0)
     radLat = lat / 180.0 * pi
@@ -78,7 +80,7 @@ def gps84_To_Gcj02(lat, lon):
     dLon = (dLon * 180.0) / (a / sqrtMagic * math.cos(radLat) * pi)
     mgLat = lat + dLat
     mgLon = lon + dLon
-    list = [mgLat, mgLon]
+    list = [mgLon, mgLat]
     print(list, 1111)
     return list
 
@@ -117,4 +119,4 @@ def bd09_to_gcj02(bd_lon, bd_lat):
 
 if __name__ == '__main__':
     gps84_To_Gcj02(116.39123343289631, 39.9072885060602)
-    gcj02_to_wgs84(116.40021938914586, 39.901383475519445)
+    gcj02_to_wgs84(116.39747455259267, 39.9086897410389)
